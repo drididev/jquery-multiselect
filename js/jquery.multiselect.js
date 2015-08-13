@@ -28,6 +28,9 @@
             addActionBox            : true,
             animateSearch           : false, // Can be 'normal', 'slow', 'fast', or int number
             searchBoxText           : 'Type here to search list...',
+            checkAllText            : 'Check all',
+            uncheckAllText          : 'Uncheck all',
+            invertSelectText        : 'Invert select',
             showCheckboxes          : true,
             showSelectedItems       : false,
             overwriteName           : false, // Use false when you need to use original name attribute, or use
@@ -247,7 +250,7 @@
                 }
 
                 if (o.addActionBox) {
-                    self.addActionBox(jSelectElem, checklistDivId, w);
+                    self.addActionBox(jSelectElem, checklistDivId, w, o);
                 }
 
                 // Bind optgroup inputs
@@ -666,15 +669,15 @@
             initSearchBox();
         },
 
-        addActionBox: function(jSelectElem, checklistDivId, w) {
+        addActionBox: function(jSelectElem, checklistDivId, w, o) {
             var self = this;
 
             var initActionBox = function() {
 
                 $(checklistDivId).after('<div class="actionButtons" id="'+jSelectElem.attr('id')+'_actionButtons">'
-                    + '<span data-action="checkAll" >Check all</span> | '
-                    + '<span data-action="clearAll" >Uncheck all</span> | '
-                    + '<span data-action="invert" >Invert select</span></div>'
+                    + '<span data-action="checkAll" >' + o.checkAllText + '</span> | '
+                    + '<span data-action="clearAll" >' + o.uncheckAllText + '</span> | '
+                    + '<span data-action="invert" >' + o.invertSelectText + '</span></div>'
                 );
 
                 var actionBoxId = '#' + jSelectElem.attr('id') + '_actionButtons';
