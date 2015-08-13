@@ -1,7 +1,8 @@
+(function (jQuery) {
 /*
  *  Project: Multiselect
  *  Description: An alternative and responsive multiselect widget
- *  URL: 
+ *  URL:
  *  Author: Danier Rivas
  *  License: MIT
  */
@@ -41,9 +42,9 @@
                                              // it compatible with Drupal's Views module and Ruby on Rails.)
             maxNumOfSelections      : -1,  // If you want to limit the number of items a user can select in a
                                            // checklist, set this to a positive integer.
-                                     
+
             // This function gets executed whenever you go over the max number of allowable selections.
-            onMaxNumExceeded        : function() { 
+            onMaxNumExceeded        : function() {
                 alert('You cannot select more than '+this.maxNumOfSelections+' items in this list.');
             },
 
@@ -63,8 +64,9 @@
             cssFocused              : 'focused', // This cssFocused is for the li's in the checklist
             cssFindInList           : 'findInList',
             cssBlurred              : 'blurred', // This cssBlurred is for the findInList divs.
+            cssContainsPlaceholder  : 'contains-placeholder', // This cssBlurred is for the findInList divs.
             cssOptgroup             : 'optgroup',
-            
+
             listWidth               : 0,    // force the list width, if 0 the original SELECT width is used
             itemWidth               : 0     // 0   : each item will be large as the list (single column)
                                             // > 0 : each item will have a fixed size, so we could split
@@ -148,11 +150,11 @@
                         checkboxValue = $(this).html();
                     }
                     checkboxValue = checkboxValue.replace(/ /g,'_');
-                    
+
                     var checkboxId = jSelectElemId+'_'+checkboxValue;
                     // escape bad values for checkboxId
                     checkboxId = checkboxId.replace(/[^A-Z0-9]+/ig, "_"); //.replace(/(\.|\/|\,|\%|\<|\>|\=)/g, '\\$1');
-                    
+
                     var labelText = $(this).html();
                     var selected = '';
                     if ($(this).attr('disabled')) {
@@ -171,7 +173,7 @@
                             }
                         }
                     }
-                    
+
                     var arrayBrackets = (o.submitDataAsArray)? '[]' : '';
                     var checkboxName = (o.preferIdOverName)? jSelectElemId+arrayBrackets : jSelectElemName+arrayBrackets;
                     // avoid trailing double [][]
@@ -186,7 +188,7 @@
                         // to hide the checkboxes off screen to the left.
                         $('#'+checkboxId).css('position','absolute').css('left','-50000px');
                     } else {
-                        $('label[for='+checkboxId+']').addClass(o.cssLeaveRoomForCheckbox); 
+                        $('label[for='+checkboxId+']').addClass(o.cssLeaveRoomForCheckbox);
                     }
                 };
 
@@ -197,12 +199,12 @@
                         '<li class="'+o.cssOptgroup+'">'
                         + '<input type="checkbox" class="'+o.cssOptgroup+'" id="'+jSelectElemId+'_'+o.cssOptgroup+'_'+i+'">'
                         + '<label for="'+jSelectElemId+'_'+o.cssOptgroup+'_'+i+'" class="leaveRoomForCheckbox">' + $(this).attr('label') + '</label>'
-                        + '</li>' + $(this).html() 
+                        + '</li>' + $(this).html()
                     );
                 });
 
                 // Loop through all remaining options (not in optgroups) and convert them to li's
-                // with checkboxes and labels.      
+                // with checkboxes and labels.
                 $('option',jSelectElem).each(convertListItemsToCheckboxes);
 
                 // If the first list item in the checklist is an optgroup label, we want
@@ -213,7 +215,7 @@
                     }
                 });
 
-                
+
                 var checklistId = jSelectElemId+'_'+'checklist';
 
                 // Convert the outer SELECT elem to a <div>
@@ -232,7 +234,7 @@
                 $('#'+jSelectElemId).attr('showSelectedItems',o.showSelectedItems.toString());
 
                 $('#'+jSelectElemId).css('width', w + 2);
-                
+
                 // We MUST set the checklist div's position to either 'relative' or 'absolute'
                 // (default is 'static'), or else Firefox will think the offsetParent of the inner
                 // elements is BODY instead of DIV.
@@ -259,7 +261,7 @@
 
                 // ============ Add styles =============
                 var items = $('li', checklistDivId);
-                
+
                 $(checklistDivId).addClass(o.cssChecklist);
                 if (o.addScrollBar) {
                     $(checklistDivId).height(h - findInListDivHeight).width(w);
@@ -279,7 +281,7 @@
                 });/*.mouseout(function() {
                     $(this).removeClass(o.cssFocused);
                 });*/
-                
+
                 // =================== multicolumn items ===================
                 // patch by Claudio Nicora (http://coolsoft.altervista.org)
                 // make items float:left if itemWidth option is set
@@ -293,18 +295,18 @@
                         });
                     });
                 }
-                    
+
                 // Highlight preselected ones.
                 items.each(function() {
                     if ($('input',this).attr('checked')) {
-                        $(this).addClass(o.cssChecked); 
+                        $(this).addClass(o.cssChecked);
                     }
                 });
 
                 // ============ Event handlers ===========
 
                 var toggleDivGlow = function() {
-                    // Make sure the div is glowing if something is checked in it.          
+                    // Make sure the div is glowing if something is checked in it.
                     if (items.hasClass(o.cssChecked)) {
                         $(checklistDivId).addClass(o.cssChecklistHighlighted);
                     } else {
@@ -328,7 +330,7 @@
 
                 // Check/uncheck boxes
                 var check = function(event) {
-                                
+
                     // This needs to be keyboard accessible too. Only check the box if the user
                     // presses space (enter typically submits a form, so is not safe).
                     if (event.type == 'keydown') {
@@ -362,12 +364,12 @@
 
                         o.onMaxNumExceeded();
 
-                        event.preventDefault();             
+                        event.preventDefault();
                         return;
                     }
 
                     // Not sure if unbind() here removes default action, but that's what I want.
-                    $('label',this).off(); 
+                    $('label',this).off();
                     // Make sure that the event handler isn't triggered twice (thus preventing the user
                     // from actually checking the box) if clicking directly on checkbox or label.
                     // Note: the && is not a mistake here. It should not be ||
@@ -378,7 +380,7 @@
                     // Change the styling of the row to be checked or unchecked.
                     var checkbox = $('input',this).get(0);
                     updateLIStyleToMatchCheckedStatus(checkbox);
-                    
+
                     // The showSelectedItems setting can change after the initial conversion to
                     // a checklist, so rather than checking o.showSelectedItems, we check the
                     // value of the custom HTML attribute on the main containing div.
@@ -386,7 +388,7 @@
                         showSelectedItems();
                     }
                 };
-                
+
                 var updateLIStyleToMatchCheckedStatus = function(checkbox) {
                     if (checkbox.checked) {
                         $(checkbox).parent().addClass(o.cssChecked);
@@ -395,7 +397,7 @@
                     }
                     toggleDivGlow();
                 };
-                
+
                 // Accessibility, primarily for IE
                 var handFocusToLI = function() {
                     // Make sure that labels and checkboxes that receive
@@ -420,9 +422,9 @@
                     }).parent();
                 };
                 $('form:has(div.'+o.cssChecklist+')').on('reset.fixFormElems',fixFormElems);
-                
+
                 // ================== List the selected items in a UL ==========================
-                
+
                 var selectedItemsListId = '#'+jSelectElemId + '_selectedItems';
                 if (o.showSelectedItems) {
                     $(selectedItemsListId).addClass(o.cssShowSelectedItems);
@@ -443,7 +445,7 @@
                         }
                     });
                 };
-                
+
                 // We have to run showSelectedItems() once here too, upon initial conversion.
                 if (o.showSelectedItems){
                     showSelectedItems();
@@ -455,22 +457,22 @@
         // Since o can be a string instead of an object, we need a function that
         // will handle the action requested when o is a string (e.g. 'clearAll')
         updateChecklist: function( action, checklistElem, selector ) {
-                        
+
             // Before we operate on all checkboxes, we need to make sure that
             // showSelectedItems is disabled, at least temporarily. Otherwise,
             // this process will be REALLY slow because it tries to update the
             // DOM a thousand times unnecessarily.
             // (We will only do this if the list is greater than 3 items.)
-            
+
             var showSelectedItemsSetting;
-            
+
             var disableDynamicList = function( checklistLength ) {
                 if (checklistLength > 3) {
                     showSelectedItemsSetting = $(checklistElem).attr('showSelectedItems');
                     $(checklistElem).attr('showSelectedItems', 'false');
                 }
             };
-            
+
             var enableDynamicList = function() {
                 $(checklistElem).attr('showSelectedItems', showSelectedItemsSetting);
             };
@@ -503,7 +505,7 @@
             }
 
             var checklistLength = $(selector, checklistElem).length;
-            disableDynamicList(checklistLength); 
+            disableDynamicList(checklistLength);
             // If it's checked, force the click event handler to run.
             $(selector, checklistElem).each(function(i) {
                 // Before we check/uncheck the penultimate item in the list, we need to restore
@@ -512,7 +514,7 @@
                 if (i == checklistLength - 2 && checklistLength > 3) {
                     enableDynamicList();
                 }
-                
+
                 if (!$(this).hasClass('optgroup')) {
                     $(this).trigger('click');
                 } else {
@@ -527,14 +529,17 @@
         },
 
         addSearchBox: function( jSelectElem, checklistDivId, w, o) {
-        
+
             // Poorly named function... It's really onFocusSearchBox.
             var focusSearchBox = function() {
-                // Remove placeholder text when focusing search box.
-                $(this).val('');
+                // Remove placeholder text when focusing search box if it contains placeholder.
+                if ($(this).hasClass(o.cssContainsPlaceholder)) {
+                    $(this).val('');
+                }
+
                 $(this).removeClass(o.cssBlurred);
             };
-            
+
             var showAllSelectOptions = function() {
                 $('label', checklistDivId).each(function() {
                     if (o.animateSearch !== false)
@@ -543,12 +548,17 @@
                         $(this).parent('li').show();
                 });
             };
-            
+
             var blurSearchBox = function() {
                 // Restore default text on blur.
-                $(this).val(o.searchBoxText);
+                if ($(this).val() === '') {
+                  $(this).val(o.searchBoxText);
+                  $(this).addClass(o.cssContainsPlaceholder);
+                  var t = setTimeout(showAllSelectOptions, 250);
+                }
+
                 $(this).addClass(o.cssBlurred);
-                
+
                 // Show all items in list unless an item in list is focused
                 /*
                 $('li', checklistDivId).each(function() {
@@ -557,27 +567,26 @@
                 if (anItemInListIsFocused)
                   return;
                 */
-                var t = setTimeout(showAllSelectOptions, 250);
             };
-            
+
             var initSearchBox = function() {
 
                 $(checklistDivId).before('<div class="findInList" id="'+jSelectElem.attr('id')+'_findInListDiv">'
                     +'<input type="text" value="'+o.searchBoxText+'" id="'
-                    +jSelectElem.attr('id')+'_findInList" class="'+o.cssBlurred+'" /></div>');
-    
+                    +jSelectElem.attr('id')+'_findInList" class="'+o.cssBlurred+' '+o.cssContainsPlaceholder+'" /></div>');
+
                 // Set width of searchbox input to same as original SELECT element.
                 w -= 4;
                 $('#'+jSelectElem.attr('id')+'_findInList').css('width',w);
-                
+
                 // Set up label elements to restore the default text to the search box
                 // when you navigate away from a list item that is focused.
-                $('label', checklistDivId).each(function() {
-                    $(this).parent().on('blur.restoreDefaultText', function() {
-                        $('#'+jSelectElem.attr('id')+'_findInList').val(o.searchBoxText)
-                          .addClass(o.cssBlurred).on('blur.blurSearchBox',blurSearchBox);
-                    });
-                });
+                //$('label', checklistDivId).each(function() {
+                //    $(this).parent().on('blur.restoreDefaultText', function() {
+                //        $('#'+jSelectElem.attr('id')+'_findInList').val(o.searchBoxText)
+                //          .addClass(o.cssBlurred).addClass(o.cssContainsPlaceholder).on('blur.blurSearchBox',blurSearchBox);
+                //    });
+                //});
 
                 var searchBoxId = '#'+jSelectElem.attr('id')+'_findInList';
 
@@ -594,35 +603,41 @@
                                 //.off('focus.focusSearchBox')
                                 //.removeClass(o.cssBlurred)
                                 //.on('focus.focusSearchBox',focusSearchBox)
-                                  .on('blur.blurSearchBox',blurSearchBox).focus();
+                                //  .on('blur.blurSearchBox',blurSearchBox)
+                                  .focus();
                                 $(this).off('keydown.tabBack');
                             }
                         }).focus(); // Focuses the actual list item found by the search box
                         // $(this).off('keydown.tabToFocus');
+
                     } else {
-                        $(this).off('blur.blurSearchBox');
+                        //$(this).off('blur.blurSearchBox');
                     }
                 })
 
                 // Set up keydown and keyup event handlers, etc. on searchbox
                 .on('focus.focusSearchBox', focusSearchBox)
                 .on('blur.blurSearchBox',blurSearchBox)
-                
+
                 .on('keyup', function(event) {
                     // Search for the actual text.
                     var textbox = this; // holder
-                    if ($(this).val() == '') {
+                    if ($(this).val() === '') {
                         showAllSelectOptions();
                         //$(this).off('keydown.tabToFocus');
                         return false;
                     }
-                    
+                    else {
+                      // Remove placeholder on user input.
+                      $(this).removeClass(o.cssContainsPlaceholder);
+                    }
+
                     $('label', checklistDivId).each(function() {
                         var $curLabel = $(this);
                         if ( !$curLabel.is(':disabled') ) {
                             var curItem = $curLabel.text().toLowerCase();
                             var typedText = textbox.value.toLowerCase();
-                            
+
                             if ( curItem.indexOf(typedText) == -1) {
                                 if (o.animateSearch !== false)
                                   $curLabel.parent('li').slideUp(o.animateSearch);
@@ -635,19 +650,19 @@
                                     $curLabel.parent('li').show();
                             }
                         }
-                        
-                    
+
+
                     });
-                    
+
                     return;
-                
+
                 });
-    
+
                 // Compensate for the extra space the search box takes up by shortening the
                 // height of the checklist div. Also account for margin below the search box.
                 findInListDivHeight = $('#'+jSelectElem.attr('id')+'_findInListDiv').height() + 3;
             };
-      
+
             initSearchBox();
         },
 
@@ -663,7 +678,7 @@
                 );
 
                 var actionBoxId = '#' + jSelectElem.attr('id') + '_actionButtons';
-              
+
                 $(actionBoxId).on('click', 'span', function() {
                     var action = $(this).data("action");
                     self.updateChecklist( action, checklistDivId );
@@ -688,3 +703,5 @@
     };
 
 })( jQuery, window, document );
+
+})(jq);
