@@ -149,7 +149,7 @@
                     if (checkboxValue == '') {
                         checkboxValue = $(this).html();
                     }
-                    checkboxValue = checkboxValue.replace(/ /g, '_');
+                    //checkboxValue = checkboxValue.replace(/ /g, '_');
 
                     var checkboxId = jSelectElemId + '_' + checkboxValue;
                     // escape bad values for checkboxId
